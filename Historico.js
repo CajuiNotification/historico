@@ -1,0 +1,7 @@
+const db=firebase.firestore(),messaging=firebase.messaging(),uid=localStorage.getItem("Uid");try{db.collection("usuarios(Site)").get().then(a=>{const b=document.querySelector("select[name=\"usuarios\"]");if(0==a.docs.length){b.innerHTML+="<option>Nenhum usuario cadastrado :/</option>"}else{const c=a.docs.reduce((a,b)=>(a+=`<option>${b.data().nome}</option>`,a),"");b.innerHTML+=c}}).catch(a=>{alert(a.message)}),document.querySelector("button").addEventListener("click",function(){const a=new FormData(document.querySelector("form")),b=a.get("usuarios");db.collection("usuarios(Site)").where("nome","==",b).get().then(a=>{a.forEach(a=>{db.collection("historico").where("usuarioUID","==",a.data().uid).orderBy("data_hora","desc").get().then(a=>{if(0==a.docs.length)alert("Historico do usuario vazio :/");else{const b=document.querySelector(".recyclerview1"),c=a.docs.reduce((a,b)=>(a+=`<div class="container-externo">
+                                            <div class="conteudo">
+                                                    <div class="texto1">
+                                                        <h6>${b.data().alteracao}</h6>
+                                                    </div>
+                                            </div>
+                                        </div>`,a),"");b.innerHTML=c}}).catch(a=>{alert(a.message)})})})})}catch(a){alert("Erro "+a)}
